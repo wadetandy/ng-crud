@@ -19,6 +19,7 @@ gem 'active_model_serializers'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
+gem 'angular-rails-templates'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

@@ -24,5 +24,7 @@ module NgCrud
     config.active_record.raise_in_transactional_callbacks = true
 
     config.assets.paths << 'bower_components'
+
+    config.angular_templates.module_name    = 'ngCrud.Templates'
   end
 end
