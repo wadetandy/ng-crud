@@ -1,0 +1,39 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+*= require_tree .
+*= require_self
+*/
+
+@import "bootstrap-sass-official/assets/stylesheets/bootstrap-sprockets";
+@import "bootstrap-sass-official/assets/stylesheets/bootstrap";
+
+@import 'font-awesome/scss/font-awesome';
+
+
+// Give everything in 'yield' margin to separate it.
+.yield {
+  margin: 30px;
+}
+
+// Constrain forms for models (scaffolded models) so they aren't full page width.
+.form-model {
+  max-width: 750px;
+}
+
+.form-user {
+  max-width: 450px;
+}
+
+ul.btn-group li {
+  list-style-type: none;
+}
