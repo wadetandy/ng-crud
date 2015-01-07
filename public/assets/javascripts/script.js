@@ -2,6 +2,14 @@ app = angular.module('ngBlog', ['ngResource', 'ngRoute'])
 
 app.config(function($routeProvider) {
   $routeProvider
+    .when('/posts',
+      {
+        templateUrl: '/assets/templates/posts/index.html',
+        controller: 'postsCtrl',
+        controllerAs: 'ctrl',
+        reloadOnSearch: false
+      }
+    )
     .when('/posts/new',
       {
         templateUrl: '/assets/templates/posts/form.html',
@@ -26,7 +34,10 @@ app.config(function($routeProvider) {
         reloadOnSearch: false
       }
     )
+    .otherwise({redirectTo: '/posts'})
 });
+
+app.config(function($locationProvider) { $locationProvider.hashPrefix('!')})
 
 app.factory('Post', function($resource, $q) {
   var resource = $resource('posts/:id/:action.json',
@@ -37,8 +48,6 @@ app.factory('Post', function($resource, $q) {
   return resource;
 });
 
-app.config(function($locationProvider) { $locationProvider.hashPrefix('!')})
-
 app.controller('postDetailsCtrl', function($scope, $routeParams, Post) {
   var ctrl = this;
 
@@ -47,7 +56,8 @@ app.controller('postDetailsCtrl', function($scope, $routeParams, Post) {
   })
 })
 
-app.controller('postFormCtrl', function($scope, $location, $routeParams, Post) {
+app.controller('postFormCtrl', function($scope, $routeParams, $location, Post) {
+  var ctrl = this;
   var id;
 
   if ($routeParams.postId) {
@@ -72,3 +82,19 @@ app.controller('postFormCtrl', function($scope, $location, $routeParams, Post) {
     });
   }
 })
+
+app.controller('postsCtrl', function($scope, Post) {
+  var ctrl = this;
+
+  this.init = function() {
+    ctrl.refreshPosts();
+  }
+
+  this.refreshPosts = function() {
+    Post.query(function(posts) {
+      $scope.posts = posts;
+    });
+  }
+
+  ctrl.init();
+});
