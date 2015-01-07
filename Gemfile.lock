@@ -110,6 +110,8 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    responders (2.0.2)
+      railties (>= 4.2.0.alpha, < 5)
     rspec (3.1.0)
       rspec-core (~> 3.1.0)
       rspec-expectations (~> 3.1.0)
@@ -176,6 +178,7 @@ DEPENDENCIES
   haml
   pry
   rails (= 4.2.0)
+  responders (~> 2.0)
   rspec
   rspec-rails
   sass-rails (~> 5.0)
