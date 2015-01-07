@@ -45,6 +45,15 @@ app.factory('Post', function($resource, $q) {
         update: {method:'PUT'}
     });
 
+  resource.prototype.saveOrUpdate = function() {
+    var method = '$save';
+
+    if (this.id) { method = '$update' }
+
+    promise = this[method]()
+    return promise;
+  }
+
   return resource;
 });
 
@@ -71,11 +80,7 @@ app.controller('postFormCtrl', function($scope, $routeParams, $location, Post) {
   })
 
   this.saveOrUpdate = function() {
-    method = '$save';
-
-    if ($scope.post.id) { method = '$update' }
-
-    $scope.post[method]().then(function(post) {
+    $scope.post.saveOrUpdate().then(function(post) {
       if (id == 'new') {
         $location.path("/posts/" + post.id)
       }
