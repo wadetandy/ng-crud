@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-lg-8">
+        <h1>{{ post.title }}</h1>
+        <p class="lead">
+            <i class="fa fa-user"></i>
+            by
+            <a ng-href="/#/user/{{ post.author.id }}"> {{ post.author.name }}</a>
+        </p>
+        <p> Posted {{ post.created_at | date : 'medium' }}</p>
+        <hr>
+
+        <div> {{ post.body }} </div>
+    </div>
+</div>
