@@ -39,11 +39,27 @@ app.config(function($routeProvider) {
 
 app.config(function($locationProvider) { $locationProvider.hashPrefix('!')})
 
-app.factory('Post', function($resource) {
-  return $resource('posts/:id/:action.json',
+app.factory('Post', function($resource, $q) {
+  var resource = $resource('posts/:id/:action.json',
     {id: '@id', action: '@action'}, {
         update: {method:'PUT'}
     });
+
+  var builtInDelete = resource.prototype.$delete
+
+  resource.prototype.$delete = function() {
+    var deferred = $q.defer()
+    var confirmed  = confirm('Are you sure you want to delete the post titled "' + this.title + '"?')
+    if (confirmed == true) {
+      deferred.resolve(builtInDelete.apply(this, arguments))
+    } else {
+      deferred.reject('cancelled by user')
+    }
+
+    return deferred.promise
+  }
+
+  return resource;
 });
 
 app.controller('postDetailsCtrl', function($scope, $routeParams, Post) {
@@ -73,7 +89,7 @@ app.controller('postFormCtrl', function($scope, $routeParams, $location, Post) {
 
     if ($scope.post.id) { method = '$update' }
 
-    $scope.post[method](function(post) {
+    $scope.post[method]().then(function(post) {
       if (id == 'new') {
         $location.path("/posts/" + post.id)
       }
@@ -92,6 +108,12 @@ app.controller('postsCtrl', function($scope, Post) {
     Post.query(function(posts) {
       $scope.posts = posts;
     });
+  }
+
+  this.destroy = function(post) {
+    post.$delete().then(function() {
+      ctrl.refreshPosts()
+    })
   }
 
   ctrl.init();
