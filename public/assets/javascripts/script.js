@@ -96,5 +96,11 @@ app.controller('postsCtrl', function($scope, Post) {
     });
   }
 
+  this.destroy = function(post) {
+    post.$delete().then(function() {
+      ctrl.refreshPosts()
+    })
+  }
+
   ctrl.init();
 });
