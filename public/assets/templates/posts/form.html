@@ -3,15 +3,16 @@
 <form class="span8 clearfix form">
   <div class="form-group">
     <label>Headline</label>
-    <input class="form-control" type="text" placeholder="Enter Title"></input>
+    <input class="form-control" type="text" placeholder="Enter Title" ng-model="post.title"></input>
   </div>
 
   <div class="form-group">
     <label>Body</label>
-    <textarea class="form-control" rows='10' placeholder="Enter Post Body"></textarea>
+    <textarea class="form-control" rows='10' placeholder="Enter Post Body" ng-model="post.body"></textarea>
   </div>
 
   <div class="pull-right">
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>
 </form>
+
