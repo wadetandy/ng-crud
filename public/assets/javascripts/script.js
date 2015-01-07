@@ -18,6 +18,14 @@ app.config(function($routeProvider) {
         reloadOnSearch: false
       }
     )
+    .when('/posts/:postId/edit',
+      {
+        templateUrl: '/assets/templates/posts/form.html',
+        controller: 'postFormCtrl',
+        controllerAs: 'ctrl',
+        reloadOnSearch: false
+      }
+    )
 });
 
 app.factory('Post', function($resource, $q) {
@@ -39,14 +47,28 @@ app.controller('postDetailsCtrl', function($scope, $routeParams, Post) {
   })
 })
 
-app.controller('postFormCtrl', function($scope, Post) {
-  Post.get({id: 'new'}, function(post) {
+app.controller('postFormCtrl', function($scope, $location, $routeParams, Post) {
+  var id;
+
+  if ($routeParams.postId) {
+    id = $routeParams.postId
+  } else {
+    id = 'new'
+  }
+
+  Post.get({id: id}, function(post) {
     $scope.post = post
   })
 
-  this.save = function() {
-    $scope.post.$save().then(function(post) {
-      $location.path("/posts/" + post.id)
+  this.saveOrUpdate = function() {
+    method = '$save';
+
+    if ($scope.post.id) { method = '$update' }
+
+    $scope.post[method]().then(function(post) {
+      if (id == 'new') {
+        $location.path("/posts/" + post.id)
+      }
     });
   }
 })
