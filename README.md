@@ -9,6 +9,8 @@ Nested Form Version 2 http://plnkr.co/edit/E4wgXxMemRyu2GmtF43Q?p=preview
 
 Nested Form Version 3 http://plnkr.co/edit/JuXRCj?p=preview
 
+Basic two-way binding demonstration http://plnkr.co/edit/a3QxnR8ul43rGdyTdRBK?p=preview
+
 ## Installation
 
 ```bash
