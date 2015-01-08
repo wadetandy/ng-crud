@@ -40,7 +40,7 @@ app.config ($locationProvider) ->
   $locationProvider.hashPrefix('!')
 
 app.factory 'Post', ($resource, $q) ->
-  resource = $resource('posts/:id/:action.json',
+  resource = $resource 'posts/:id/:action.json',
     {id: '@id', action: '@action'}, {update: {method:'PUT'}}
 
   resource::saveOrUpdate = ->
@@ -55,48 +55,33 @@ class PostDetailsController
     @Post.get id: @routeParams.postId, (post) =>
       @scope.post = post
 
-app.controller('postFormCtrl', function($scope, $routeParams, $location, Post) {
-  var ctrl = this;
-  var id;
+app.controller 'postDetailsCtrl', ['$scope', '$routeParams', 'Post', PostDetailsController]
 
-  if ($routeParams.postId) {
-    id = $routeParams.postId
-  } else {
-    id = 'new'
-  }
+class PostFormController
+  constructor: (@scope, @routeParams, @location, @Post) ->
+    @id = @routeParams.postId || 'new'
 
-  Post.get({id: id}, function(post) {
-    $scope.post = post
-  })
+    @Post.get id: @id, (post) =>
+      @scope.post = post
 
-  this.saveOrUpdate = function() {
-    $scope.post.saveOrUpdate().then(function(post) {
-      if (id == 'new') {
-        $location.path("/posts/" + post.id)
-      }
-    });
-  }
-})
+  saveOrUpdate: =>
+    @scope.post.saveOrUpdate().then (post) =>
+      @location.path("/posts/#{post.id}") if @id == 'new'
 
-app.controller('postsCtrl', function($scope, Post) {
-  var ctrl = this;
 
-  this.init = function() {
-    ctrl.refreshPosts();
-  }
+class PostsController
+  constructor: (@scope, @Post) ->
+    @init()
 
-  this.refreshPosts = function() {
-    Post.query(function(posts) {
-      $scope.posts = posts;
-    });
-  }
+  init: =>
+    @refreshPosts()
 
-  this.destroy = function(post) {
-    post.$delete().then(function() {
-      ctrl.refreshPosts()
-    })
-  }
+  refreshPosts: =>
+    @Post.query (posts) =>
+      @scope.posts = posts
 
-  ctrl.init();
-});
+  destroy: =>
+    @post.$delete().then =>
+      @refreshPosts()
 
+app.controller 'postsCtrl', ['$scope', 'Post', PostsController]
